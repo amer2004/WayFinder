@@ -10,4 +10,5 @@ public class Hotel:Entity
 
     public Admin Admin { get; set; }
     public List<Room> Rooms { get; set; }
+    public List<Offer> Offers { get; set; }
 }

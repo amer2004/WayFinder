@@ -1,7 +1,7 @@
 ﻿namespace GraduationProjectWebApi.Models.Hotels;
 public class Room : Entity
 {
-    public int Number { get; set; } //Add
+    public int Number { get; set; } //Added
     public bool Status { get; set; }
     public decimal Price { get; set; }
 

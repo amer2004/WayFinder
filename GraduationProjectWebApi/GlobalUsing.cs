@@ -2,3 +2,6 @@
 global using GraduationProjectWebApi.Abstraction;
 global using GraduationProjectWebApi.Models.Flights;
 global using GraduationProjectWebApi.Models.Offers;
+global using Microsoft.EntityFrameworkCore;
+global using GraduationProjectWebApi.Models;
+global using System.Text.Json.Serialization;
