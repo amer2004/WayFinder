@@ -6,9 +6,9 @@ public class User : Entity
     public string Password { get; set; }
 
     [JsonIgnore]
-    public List<OffersBooking> OffersBookings { get; set; }
+    public List<OffersBooking> OffersBookings { get; set; } = [];
 
     [JsonIgnore]
-    public List<FlightBooking> FlightBookings { get; set; }
+    public List<FlightBooking> FlightBookings { get; set; } = [];
 
 }

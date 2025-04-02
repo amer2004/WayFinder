@@ -5,3 +5,4 @@ global using GraduationProjectWebApi.Models.Offers;
 global using Microsoft.EntityFrameworkCore;
 global using GraduationProjectWebApi.Models;
 global using System.Text.Json.Serialization;
+global using GraduationProjectWebApi.Models.Enums;

@@ -23,12 +23,15 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     {
         ValidateIssuerSigningKey = true,
         ValidateAudience = false,
+        RequireExpirationTime = false,
         ValidateIssuer = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7y*9Q!bN5@Gw@QWxsDWATFFMJ7y*is!bN5@Gw@QWxsDWATFFM")),
     };
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<AdminType>()));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -37,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Name = "Bearer",
+        Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();

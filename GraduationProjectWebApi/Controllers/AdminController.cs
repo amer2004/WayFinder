@@ -9,15 +9,14 @@ namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
     [Route("[Controller]/[Action]")]
-    public class UserController(AppDbContext context) : Controller
+    public class AdminController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
-
         [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _context.Users.ToListAsync();
+            var result = await _context.Admins.ToListAsync();
             return Ok(result);
         }
 
@@ -25,7 +24,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            var result = await _context.Users.FindAsync(Id);
+            var result = await _context.Admins.FindAsync(Id);
             if (result is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
@@ -33,17 +32,18 @@ namespace GraduationProjectWebApi.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] User user)
+        public async Task<IActionResult> Add(Admin admin)
         {
-            var EmailCheck = await _context.Users.AnyAsync(x => x.Email == user.Email);
+            var EmailCheck = await _context.Admins.AnyAsync(x => x.Email == admin.Email);
             if (EmailCheck)
             {
                 return BadRequest("the email is already used");
             }
             try
             {
-                await _context.AddAsync(user);
+                await _context.AddAsync(admin);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -55,13 +55,13 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] User user)
+        public async Task<IActionResult> Update([FromBody] Admin admin)
         {
             try
             {
-                _context.Users.Update(user);
+                _context.Admins.Update(admin);
                 await _context.SaveChangesAsync();
-                return Ok(user);
+                return Ok(admin);
             }
             catch (Exception ex)
             {
@@ -73,12 +73,11 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            var entity = await _context.Users.FindAsync(Id);
+            var entity = await _context.Admins.FindAsync(Id);
             if (entity is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
-
             try
             {
                 _context.Remove(entity);
@@ -94,7 +93,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("Login/{Email}/{Password}")]
         public async Task<IActionResult> Login(string Email, string Password)
         {
-            var result = await _context.Users.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
+            var result = await _context.Admins.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
             if (result is null)
             {
                 return BadRequest();
@@ -102,11 +101,11 @@ namespace GraduationProjectWebApi.Controllers
             var Token = CreateToken(result);
             return Ok(Token);
         }
-        private string CreateToken(User user)
+        private string CreateToken(Admin admin)
         {
             List<Claim> Claims = [];
-            Claims.Add(new(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            Claims.Add(new(ClaimTypes.Email, user.Email));
+            Claims.Add(new(ClaimTypes.NameIdentifier, admin.Id.ToString()));
+            Claims.Add(new(ClaimTypes.Email, admin.Email));
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7y*9Q!bN5@Gw@QWxsDWATFFMJ7y*is!bN5@Gw@QWxsDWATFFM"));
             var card = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256Signature);
             var Token = new JwtSecurityToken(
