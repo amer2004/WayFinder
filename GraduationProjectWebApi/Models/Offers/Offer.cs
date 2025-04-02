@@ -13,8 +13,10 @@ public class Offer : Entity
     public Flight? Flight { get; set; }
     public Hotel? Hotel { get; set; }
     public Guide? Guide { get; set; }
-
-    public List<OffersBooking> OffersBookings { get; set; }
-    public List<HotelReservation> HotelReservations { get; set; }
-    public List<FlightBooking> FlightBookings { get; set; }
+    [JsonIgnore]
+    public List<OffersBooking> OffersBookings { get; set; } = [];
+    [JsonIgnore]
+    public List<HotelReservation> HotelReservations { get; set; } = [];
+    [JsonIgnore]
+    public List<FlightBooking> FlightBookings { get; set; } = [];
 }

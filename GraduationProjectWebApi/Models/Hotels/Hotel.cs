@@ -9,6 +9,8 @@ public class Hotel:Entity
     public int AdminId { get; set; }
 
     public Admin Admin { get; set; }
-    public List<Room> Rooms { get; set; }
-    public List<Offer> Offers { get; set; }
+    [JsonIgnore]
+    public List<Room> Rooms { get; set; } = [];
+    [JsonIgnore]
+    public List<Offer> Offers { get; set; } = [];
 }

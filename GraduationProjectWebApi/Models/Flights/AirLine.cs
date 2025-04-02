@@ -7,5 +7,6 @@ public class AirLine:Entity
     public int AdminId { get; set; }
 
     public Admin Admin { get; set; }
-    public List<Flight> Flights { get; set; }
+    [JsonIgnore]
+    public List<Flight> Flights { get; set; } = [];
 }
