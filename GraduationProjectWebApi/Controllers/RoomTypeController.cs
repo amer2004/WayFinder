@@ -5,7 +5,7 @@ namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
     [Route("[Controller]/")]
-    public class FlightController(AppDbContext context) : Controller
+    public class RoomTypeController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
 
@@ -13,7 +13,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _context.Flights.ToListAsync();
+            var result = await _context.RoomTypes.ToListAsync();
             return Ok(result);
         }
 
@@ -21,7 +21,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            var result = await _context.Flights.FindAsync(Id);
+            var result = await _context.RoomTypes.FindAsync(Id);
             if (result is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
@@ -31,20 +31,15 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] FlightDTO dto)
+        public async Task<IActionResult> Add([FromBody] RoomTypeDTO dto)
         {
-            var flight = new Flight
+            var roomType = new RoomType
             {
-                Number = dto.Number,
-                AirLineId = dto.AirLineId,
-                DepartureLocationId = dto.DepartureLocationId,
-                DestinationLocationId = dto.DestinationLocationId,
-                ArrivalTime = dto.ArrivalTime,
-                Departure = dto.Departure,
+                Size = dto.Size,
             };
             try
             {
-                await _context.AddAsync(flight);
+                await _context.AddAsync(roomType);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -56,24 +51,19 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] FlightDTO dto)
+        public async Task<IActionResult> Update(int Id, [FromBody] RoomTypeDTO dto)
         {
-            var flight = await _context.Flights.FindAsync(Id);
-            if (flight is null)
+            var roomType = await _context.RoomTypes.FindAsync(Id);
+            if (roomType is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
-            flight.Number = dto.Number;
-            flight.AirLineId = dto.AirLineId;
-            flight.ArrivalTime = dto.ArrivalTime;
-            flight.Departure = dto.Departure;
-            flight.DepartureLocationId = dto.DepartureLocationId;
-            flight.DestinationLocationId = dto.DestinationLocationId;
+            roomType.Size = dto.Size;
             try
             {
-                _context.Flights.Update(flight);
+                _context.RoomTypes.Update(roomType);
                 await _context.SaveChangesAsync();
-                return Ok(flight);
+                return Ok(roomType);
             }
             catch (Exception ex)
             {
@@ -85,7 +75,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            var entity = await _context.Flights.FindAsync(Id);
+            var entity = await _context.RoomTypes.FindAsync(Id);
             if (entity is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
@@ -101,6 +91,5 @@ namespace GraduationProjectWebApi.Controllers
                 return BadRequest(ex);
             }
         }
-
     }
 }

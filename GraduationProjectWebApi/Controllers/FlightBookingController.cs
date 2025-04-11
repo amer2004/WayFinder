@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]/[Action]")]
+    [Route("[Controller]/")]
     public class FlightBookingController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
@@ -31,8 +31,16 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] FlightBooking flight)
+        public async Task<IActionResult> Add([FromBody] FlightBookingDTO dto)
         {
+            var flight = new FlightBooking
+            {
+                FlightId = dto.FlightId,
+                OfferId = dto.OfferId,
+                UserId = dto.UserId,
+                Price = dto.Price,
+                BookDate = dto.BookDate,
+            };
             try
             {
                 await _context.AddAsync(flight);
@@ -41,19 +49,29 @@ namespace GraduationProjectWebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] FlightBooking flight)
+        [HttpPut("Update/{Id}")]
+        public async Task<IActionResult> Update(int Id,[FromBody] FlightBookingDTO dto)
         {
+            var flightBooking = await _context.FlightBookings.FindAsync(Id);
+            if (flightBooking is null)
+            {
+                return BadRequest("The provided id dose not correspond to an object");
+            }
+            flightBooking.BookDate = dto.BookDate;
+            flightBooking.OfferId = dto.OfferId;
+            flightBooking.FlightId = dto.FlightId;
+            flightBooking.UserId = dto.UserId;
+            flightBooking.Price = dto.Price;
             try
             {
-                _context.FlightBookings.Update(flight);
+                _context.FlightBookings.Update(flightBooking);
                 await _context.SaveChangesAsync();
-                return Ok(flight);
+                return Ok(flightBooking);
             }
             catch (Exception ex)
             {

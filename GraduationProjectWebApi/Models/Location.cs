@@ -6,8 +6,8 @@ public class Location : Entity
     public string Country { get; set; }
 
     [JsonIgnore]
-    public List<Flight> DepartureFlights { get; set; }
+    public List<Flight> DepartureFlights { get; set; } = [];
     [JsonIgnore]
-    public List<Flight> DestinationFlights { get; set; }
+    public List<Flight> DestinationFlights { get; set; } = [];
 
 }

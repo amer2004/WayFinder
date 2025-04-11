@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]/[Action]")]
+    [Route("[Controller]/")]
     public class AirLineController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
@@ -31,8 +31,14 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] AirLine airLine)
+        public async Task<IActionResult> Add([FromBody] AirLineDTO dto)
         {
+            var airLine = new AirLine
+            {
+                AdminId = dto.AdminId,
+                Location = dto.Location,
+                Name = dto.Name,
+            };
             try
             {
                 await _context.AddAsync(airLine);
@@ -46,9 +52,17 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] AirLine airLine)
+        [HttpPut("Update/{Id}")]
+        public async Task<IActionResult> Update(int Id, [FromBody] AirLineDTO dto)
         {
+            var airLine = await _context.AirLines.FindAsync(Id);
+            if (airLine is null)
+            {
+                return BadRequest("The provided id dose not correspond to an object");
+            }
+            airLine.Name = dto.Name;
+            airLine.Location = dto.Location;
+            airLine.AdminId = dto.AdminId;
             try
             {
                 _context.AirLines.Update(airLine);

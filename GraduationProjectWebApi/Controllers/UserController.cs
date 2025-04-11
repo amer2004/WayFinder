@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +9,7 @@ using System.Text;
 namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]/[Action]")]
+    [Route("[Controller]/")]
     public class UserController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
@@ -34,13 +35,19 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] User user)
+        public async Task<IActionResult> Add([FromBody] UserDTO dto)
         {
-            var EmailCheck = await _context.Users.AnyAsync(x => x.Email == user.Email);
+            var EmailCheck = await _context.Users.AnyAsync(x => x.Email == dto.Email);
             if (EmailCheck)
             {
                 return BadRequest("the email is already used");
             }
+            var user = new User
+            {
+                Email = dto.Email,
+                Name = dto.Name,
+                Password = dto.Password,
+            };
             try
             {
                 await _context.AddAsync(user);
@@ -54,9 +61,17 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] User user)
+        [HttpPut("Update/{Id}")]
+        public async Task<IActionResult> Update(int Id,[FromBody] UserDTO dto)
         {
+            var user = await _context.Users.FindAsync(Id);
+            if (user is null)
+            {
+                return BadRequest("The provided id dose not correspond to an object");
+            }
+            user.Name = dto.Name;
+            user.Password = dto.Password;
+            user.Email = dto.Email;
             try
             {
                 _context.Users.Update(user);

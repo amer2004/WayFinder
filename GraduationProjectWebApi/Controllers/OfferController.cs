@@ -5,7 +5,7 @@ namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
     [Route("[Controller]/")]
-    public class FlightController(AppDbContext context) : Controller
+    public class OfferController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
 
@@ -13,7 +13,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _context.Flights.ToListAsync();
+            var result = await _context.Offers.ToListAsync();
             return Ok(result);
         }
 
@@ -21,7 +21,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            var result = await _context.Flights.FindAsync(Id);
+            var result = await _context.Offers.FindAsync(Id);
             if (result is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
@@ -31,20 +31,21 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] FlightDTO dto)
+        public async Task<IActionResult> Add([FromBody] OfferDTO dto)
         {
-            var flight = new Flight
+            var offer = new Offer
             {
-                Number = dto.Number,
-                AirLineId = dto.AirLineId,
-                DepartureLocationId = dto.DepartureLocationId,
-                DestinationLocationId = dto.DestinationLocationId,
-                ArrivalTime = dto.ArrivalTime,
-                Departure = dto.Departure,
+                HotelId = dto.HotelId,
+                GuideId = dto.GuideId,
+                Price = dto.Price,
+                Name = dto.Name,
+                FlightId = dto.FlightId,
+                Details = dto.Details,
+                Days = dto.Days,
             };
             try
             {
-                await _context.AddAsync(flight);
+                await _context.AddAsync(offer);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -56,24 +57,25 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] FlightDTO dto)
+        public async Task<IActionResult> Update(int Id, [FromBody] OfferDTO dto)
         {
-            var flight = await _context.Flights.FindAsync(Id);
-            if (flight is null)
+            var offer = await _context.Offers.FindAsync(Id);
+            if (offer is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
-            flight.Number = dto.Number;
-            flight.AirLineId = dto.AirLineId;
-            flight.ArrivalTime = dto.ArrivalTime;
-            flight.Departure = dto.Departure;
-            flight.DepartureLocationId = dto.DepartureLocationId;
-            flight.DestinationLocationId = dto.DestinationLocationId;
+            offer.Price = dto.Price;
+            offer.Days = dto.Days;
+            offer.Details = dto.Details;
+            offer.FlightId = dto.FlightId;
+            offer.Name = dto.Name;
+            offer.GuideId = dto.GuideId;
+            offer.HotelId = dto.HotelId;
             try
             {
-                _context.Flights.Update(flight);
+                _context.Offers.Update(offer);
                 await _context.SaveChangesAsync();
-                return Ok(flight);
+                return Ok(offer);
             }
             catch (Exception ex)
             {
@@ -85,7 +87,7 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            var entity = await _context.Flights.FindAsync(Id);
+            var entity = await _context.Offers.FindAsync(Id);
             if (entity is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");

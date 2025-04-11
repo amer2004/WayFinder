@@ -8,7 +8,7 @@ using System.Text;
 namespace GraduationProjectWebApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]/[Action]")]
+    [Route("[Controller]/")]
     public class AdminController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
@@ -34,13 +34,20 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add(Admin admin)
+        public async Task<IActionResult> Add(AdminDTO dto)
         {
-            var EmailCheck = await _context.Admins.AnyAsync(x => x.Email == admin.Email);
+            var EmailCheck = await _context.Admins.AnyAsync(x => x.Email == dto.Email);
             if (EmailCheck)
             {
                 return BadRequest("the email is already used");
             }
+            var admin = new Admin
+            {
+                Email = dto.Email,
+                Name = dto.Name,
+                Password = dto.Password,
+                Type = dto.Type,
+            };
             try
             {
                 await _context.AddAsync(admin);
@@ -54,9 +61,18 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] Admin admin)
+        [HttpPut("Update/{Id}")]
+        public async Task<IActionResult> Update(int Id,[FromBody] AdminDTO dto)
         {
+            var admin = await _context.Admins.FindAsync(Id);
+            if (admin is null)
+            {
+                return BadRequest("The provided id dose not correspond to an object");
+            }
+            admin.Email = dto.Email;
+            admin.Name = dto.Name;
+            admin.Password = dto.Password;
+            admin.Type = dto.Type;
             try
             {
                 _context.Admins.Update(admin);

@@ -2,20 +2,11 @@ using GraduationProjectWebApi;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Authorization;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-const string ConStr = "Data Source=AMER-LAPTOP\\SQLEXPRESS;" +
-    "Integrated Security=True;" +
-    "Connect Timeout=30;" +
-    "Database = GraduationProjectDB" +
-    "Encrypt=false;" +
-    "Trust Server Certificate=True;" +
-    "Application Intent=ReadWrite;" +
-    "Multi Subnet Failover=False";
+const string ConStr = "workstation id=WayFinderDB.mssql.somee.com;packet size=4096;user id=BayanAlkh_SQLLogin_1;pwd=4f9grdx8iz;data source=WayFinderDB.mssql.somee.com;persist security info=False;initial catalog=WayFinderDB;TrustServerCertificate=True";
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
@@ -30,11 +21,14 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 });
 
 builder.Services.AddControllers().AddJsonOptions(options =>
-options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<AdminType>()));
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<AdminType>());
+});
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddCors();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -59,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthorization();
 

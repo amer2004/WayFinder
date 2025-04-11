@@ -10,7 +10,10 @@ public class Flight : Entity
     public int DepartureLocationId { get; set; }
     public int DestinationLocationId { get; set; }
 
-    public AirLine AirLine { get; set; }
-    public Location DepartureLocation { get; set; }
-    public Location DestinationLocation { get; set; }
+    [JsonIgnore]
+    public AirLine? AirLine { get; set; } = null;
+    [JsonIgnore]
+    public Location? DepartureLocation { get; set; } = null;
+    [JsonIgnore]
+    public Location? DestinationLocation { get; set; } = null;
 }
