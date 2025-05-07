@@ -12,7 +12,7 @@ namespace GraduationProjectWebApi.Controllers
     public class AdminController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -20,7 +20,7 @@ namespace GraduationProjectWebApi.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -32,7 +32,7 @@ namespace GraduationProjectWebApi.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add(AdminDTO dto)
         {
@@ -60,9 +60,9 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> Update(int Id,[FromBody] AdminDTO dto)
+        public async Task<IActionResult> Update(int Id, [FromBody] AdminDTO dto)
         {
             var admin = await _context.Admins.FindAsync(Id);
             if (admin is null)
@@ -85,7 +85,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
@@ -106,7 +106,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [HttpGet("Login/{Email}/{Password}")]
+        [HttpPost("Login/{Email}/{Password}")]
         public async Task<IActionResult> Login(string Email, string Password)
         {
             var result = await _context.Admins.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
@@ -122,6 +122,7 @@ namespace GraduationProjectWebApi.Controllers
             List<Claim> Claims = [];
             Claims.Add(new(ClaimTypes.NameIdentifier, admin.Id.ToString()));
             Claims.Add(new(ClaimTypes.Email, admin.Email));
+            Claims.Add(new(ClaimTypes.Role, admin.Type.ToString()));
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7y*9Q!bN5@Gw@QWxsDWATFFMJ7y*is!bN5@Gw@QWxsDWATFFM"));
             var card = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256Signature);
             var Token = new JwtSecurityToken(

@@ -29,7 +29,7 @@ namespace GraduationProjectWebApi.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "FilghtAdmin,SuperAdmin")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] FlightDTO dto)
         {
@@ -54,7 +54,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "FilghtAdmin,SuperAdmin")]
         [HttpPut("Update/{Id}")]
         public async Task<IActionResult> Update(int Id, [FromBody] FlightDTO dto)
         {
@@ -81,7 +81,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "FilghtAdmin,SuperAdmin")]
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {

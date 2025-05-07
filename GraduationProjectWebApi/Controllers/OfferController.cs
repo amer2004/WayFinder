@@ -29,7 +29,7 @@ namespace GraduationProjectWebApi.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "OffersAdmin,SuperAdmin")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] OfferDTO dto)
         {
@@ -55,7 +55,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "OffersAdmin,SuperAdmin")]
         [HttpPut("Update/{Id}")]
         public async Task<IActionResult> Update(int Id, [FromBody] OfferDTO dto)
         {
@@ -83,7 +83,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "OffersAdmin,SuperAdmin")]
         [HttpPut("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {

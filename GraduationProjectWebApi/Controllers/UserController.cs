@@ -14,7 +14,7 @@ namespace GraduationProjectWebApi.Controllers
     {
         private readonly AppDbContext _context = context;
 
-        [Authorize]
+        [Authorize(Roles ="")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -62,7 +62,7 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> Update(int Id,[FromBody] UserDTO dto)
+        public async Task<IActionResult> Update(int Id,[FromForm] UserDTO dto)
         {
             var user = await _context.Users.FindAsync(Id);
             if (user is null)
@@ -106,7 +106,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [HttpGet("Login/{Email}/{Password}")]
+        [HttpPost("Login/{Email}/{Password}")]
         public async Task<IActionResult> Login(string Email, string Password)
         {
             var result = await _context.Users.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
