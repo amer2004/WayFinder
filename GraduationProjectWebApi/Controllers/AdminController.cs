@@ -106,7 +106,7 @@ namespace GraduationProjectWebApi.Controllers
             }
         }
 
-        [HttpPost("Login/{Email}/{Password}")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(string Email, string Password)
         {
             var result = await _context.Admins.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
