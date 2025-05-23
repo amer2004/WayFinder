@@ -33,6 +33,18 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] OffersBookingDTO dto)
         {
+            var offer = await _context.Offers.FindAsync(dto.OfferId);
+            if (offer is null)
+            {
+                return BadRequest("The provided flight id dose not correspond to an object");
+            }
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user is null)
+            {
+                return BadRequest("The provided user id dose not correspond to an object");
+            }
+
             var booking = new OffersBooking
             {
                 Price = dto.Price,
@@ -61,6 +73,19 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
+
+            var offer = await _context.Offers.FindAsync(dto.OfferId);
+            if (offer is null)
+            {
+                return BadRequest("The provided flight id dose not correspond to an object");
+            }
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user is null)
+            {
+                return BadRequest("The provided user id dose not correspond to an object");
+            }
+
             booking.BookDate = dto.BookDate;
             booking.OfferId = dto.OfferId;
             booking.UserId = dto.UserId;

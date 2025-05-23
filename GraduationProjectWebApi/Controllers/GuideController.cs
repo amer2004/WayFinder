@@ -33,10 +33,20 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] GuideDTO dto)
         {
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
             var guide = new Guide
             {
                 AdminId = dto.AdminId,
-                Name = dto.Name,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
+                BirthDate = dto.BirthDate,
+                Image=dto.Image,
+                Nationality=dto.Nationality,
             };
             try
             {
@@ -59,8 +69,18 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
             guide.AdminId = dto.AdminId;
-            guide.Name = dto.Name;
+            guide.LastName = dto.LastName;
+            guide.FirstName = dto.FirstName;
+            guide.PhoneNumber = dto.PhoneNumber;
+            guide.Image = dto.Image;
+            guide.Nationality = dto.Nationality;
+            guide.BirthDate = dto.BirthDate;
             try
             {
                 _context.Guides.Update(guide);

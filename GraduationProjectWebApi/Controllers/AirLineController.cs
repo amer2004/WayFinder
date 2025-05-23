@@ -33,8 +33,14 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] AirLineDTO dto)
         {
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
             var airLine = new AirLine
             {
+                Image = dto.Image,
                 AdminId = dto.AdminId,
                 Location = dto.Location,
                 Name = dto.Name,
@@ -60,9 +66,17 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
+
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
+
             airLine.Name = dto.Name;
             airLine.Location = dto.Location;
             airLine.AdminId = dto.AdminId;
+            airLine.Image = dto.Image;
             try
             {
                 _context.AirLines.Update(airLine);

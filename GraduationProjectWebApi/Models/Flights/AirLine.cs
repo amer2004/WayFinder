@@ -3,8 +3,9 @@ public class AirLine:Entity
 {
     public string Name { get; set; }
     public string Location { get; set; }
-
+    public string? Image { get; set; }
     public int AdminId { get; set; }
+
     [JsonIgnore]
     public Admin? Admin { get; set; }
     [JsonIgnore]

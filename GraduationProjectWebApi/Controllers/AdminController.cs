@@ -44,7 +44,9 @@ namespace GraduationProjectWebApi.Controllers
             var admin = new Admin
             {
                 Email = dto.Email,
-                Name = dto.Name,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
                 Password = dto.Password,
                 Type = dto.Type,
             };
@@ -70,7 +72,9 @@ namespace GraduationProjectWebApi.Controllers
                 return BadRequest("The provided id dose not correspond to an object");
             }
             admin.Email = dto.Email;
-            admin.Name = dto.Name;
+            admin.LastName = dto.LastName;
+            admin.PhoneNumber = dto.PhoneNumber;
+            admin.FirstName = dto.FirstName;
             admin.Password = dto.Password;
             admin.Type = dto.Type;
             try
@@ -112,7 +116,7 @@ namespace GraduationProjectWebApi.Controllers
             var result = await _context.Admins.FirstOrDefaultAsync(x => x.Email == Email && x.Password == Password);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest("The email or password is incorrect");
             }
             var Token = CreateToken(result);
             return Ok(Token);
@@ -122,6 +126,7 @@ namespace GraduationProjectWebApi.Controllers
             List<Claim> Claims = [];
             Claims.Add(new(ClaimTypes.NameIdentifier, admin.Id.ToString()));
             Claims.Add(new(ClaimTypes.Email, admin.Email));
+            Claims.Add(new(ClaimTypes.MobilePhone, admin.PhoneNumber));
             Claims.Add(new(ClaimTypes.Role, admin.Type.ToString()));
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7y*9Q!bN5@Gw@QWxsDWATFFMJ7y*is!bN5@Gw@QWxsDWATFFM"));
             var card = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256Signature);

@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 const string ConStr = "workstation id=WayFinderDB.mssql.somee.com;packet size=4096;user id=BayanAlkh_SQLLogin_1;pwd=4f9grdx8iz;data source=WayFinderDB.mssql.somee.com;persist security info=False;initial catalog=WayFinderDB;TrustServerCertificate=True";
+//const string ConStr = "Data Source=AMER-LAPTOP\\SQLEXPRESS;initial catalog=WayFinderDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {

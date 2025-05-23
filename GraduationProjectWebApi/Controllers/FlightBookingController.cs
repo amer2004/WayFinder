@@ -33,7 +33,26 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] FlightBookingDTO dto)
         {
-            var flight = new FlightBooking
+            var flight = await _context.Flights.FindAsync(dto.FlightId);
+            if (flight is null)
+            {
+                return BadRequest("The provided flight id dose not correspond to an object");
+            }
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user is null)
+            {
+                return BadRequest("The provided User id dose not correspond to an object");
+            }
+            if (dto.OfferId is not null)
+            {
+                var offer = await _context.Offers.FindAsync(dto.OfferId);
+                if (offer is null)
+                {
+                    return BadRequest("The provided offer id dose not correspond to an object");
+                }
+            }
+            var flightBooking = new FlightBooking
             {
                 FlightId = dto.FlightId,
                 OfferId = dto.OfferId,
@@ -43,7 +62,7 @@ namespace GraduationProjectWebApi.Controllers
             };
             try
             {
-                await _context.AddAsync(flight);
+                await _context.AddAsync(flightBooking);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -62,6 +81,28 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
+
+            var flight = await _context.Flights.FindAsync(dto.FlightId);
+            if (flight is null)
+            {
+                return BadRequest("The provided flight id dose not correspond to an object");
+            }
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user is null)
+            {
+                return BadRequest("The provided User id dose not correspond to an object");
+            }
+
+            if (dto.OfferId is not null)
+            {
+                var offer = await _context.Offers.FindAsync(dto.OfferId);
+                if (offer is null)
+                {
+                    return BadRequest("The provided offer id dose not correspond to an object");
+                }
+            }
+
             flightBooking.BookDate = dto.BookDate;
             flightBooking.OfferId = dto.OfferId;
             flightBooking.FlightId = dto.FlightId;

@@ -35,6 +35,7 @@ namespace GraduationProjectWebApi.Controllers
         {
             var roomType = new RoomType
             {
+                Name = dto.Name,
                 Size = dto.Size,
             };
             try
@@ -59,6 +60,7 @@ namespace GraduationProjectWebApi.Controllers
                 return BadRequest("The provided id dose not correspond to an object");
             }
             roomType.Size = dto.Size;
+            roomType.Name = dto.Name;
             try
             {
                 _context.RoomTypes.Update(roomType);

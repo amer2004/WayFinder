@@ -14,7 +14,7 @@ namespace GraduationProjectWebApi.Controllers
     {
         private readonly AppDbContext _context = context;
 
-        [Authorize(Roles ="")]
+        [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -45,7 +45,11 @@ namespace GraduationProjectWebApi.Controllers
             var user = new User
             {
                 Email = dto.Email,
-                Name = dto.Name,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                BirthDate = dto.BirthDate,
+                Nationality = dto.Nationality,
+                PhoneNumber = dto.PhoneNumber,
                 Password = dto.Password,
             };
             try
@@ -69,8 +73,12 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
-            user.Name = dto.Name;
-            user.Password = dto.Password;
+            user.LastName = dto.LastName;
+            user.FirstName = dto.FirstName;
+            user.BirthDate = dto.BirthDate;
+            user.Nationality = dto.Nationality;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.Password = dto.Password;   
             user.Email = dto.Email;
             try
             {

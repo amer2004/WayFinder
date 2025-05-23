@@ -63,6 +63,26 @@ namespace GraduationProjectWebApi.Controllers
             {
                 return BadRequest("The provided id dose not correspond to an object");
             }
+
+            var DepartureLocation = await _context.Locations.FindAsync(dto.DepartureLocationId);
+            if (DepartureLocation is null)
+            {
+                return BadRequest("The provided Departure Location id dose not correspond to an object");
+            }
+
+            var DestinationLocation = await _context.Locations.FindAsync(dto.DestinationLocationId);
+            if (DestinationLocation is null)
+            {
+                return BadRequest("The provided Destination Location id dose not correspond to an object");
+            }
+
+
+            var airLine = await _context.AirLines.FindAsync(dto.AirLineId);
+            if (airLine is null)
+            {
+                return BadRequest("The provided air line id dose not correspond to an object");
+            }
+
             flight.Number = dto.Number;
             flight.AirLineId = dto.AirLineId;
             flight.ArrivalTime = dto.ArrivalTime;

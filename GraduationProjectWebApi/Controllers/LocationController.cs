@@ -38,6 +38,7 @@ namespace GraduationProjectWebApi.Controllers
                 Country=dto.Country,
                 Description=dto.Description,
                 Name=dto.Name,
+                Image=dto.Image,
             };
             try
             {
@@ -63,6 +64,7 @@ namespace GraduationProjectWebApi.Controllers
             location.Description = dto.Description;
             location.Name = dto.Name;
             location.Country = dto.Country;
+            location.Image = dto.Image;
             try
             {
                 _context.Locations.Update(location);

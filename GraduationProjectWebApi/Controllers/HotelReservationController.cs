@@ -33,6 +33,20 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] HotelReservationDTO dto)
         {
+            if (dto.OfferId is not null)
+            {
+                var offer = await _context.Offers.FindAsync(dto.OfferId);
+                if (offer is null)
+                {
+                    return BadRequest("The provided offer id dose not correspond to an object");
+                }
+            }
+
+            var room = await _context.Rooms.FindAsync(dto.RoomId);
+            if (room is null)
+            {
+                return BadRequest("The provided room id dose not correspond to an object");
+            }
             var hotel = new HotelReservation
             {
                 Days = dto.Days,
@@ -60,6 +74,21 @@ namespace GraduationProjectWebApi.Controllers
             if (hotel is null)
             {
                 return BadRequest("The provided id dose not correspond to an object");
+            }
+
+            if (dto.OfferId is not null)
+            {
+                var offer = await _context.Offers.FindAsync(dto.OfferId);
+                if (offer is null)
+                {
+                    return BadRequest("The provided offer id dose not correspond to an object");
+                }
+            }
+
+            var room = await _context.Rooms.FindAsync(dto.RoomId);
+            if (room is null)
+            {
+                return BadRequest("The provided room id dose not correspond to an object");
             }
             hotel.OfferId = dto.OfferId;
             hotel.RoomId = dto.RoomId;
