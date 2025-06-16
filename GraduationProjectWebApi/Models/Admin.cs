@@ -14,4 +14,6 @@ public class Admin : Entity
     public List<Hotel> Hotels { get; set; } = [];
     [JsonIgnore]
     public List<AirLine> AirLines { get; set; } = [];
+    [JsonIgnore]
+    public List<Flight> Flights { get; set; } = [];
 }

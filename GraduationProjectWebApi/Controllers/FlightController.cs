@@ -33,9 +33,35 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] FlightDTO dto)
         {
+            var DepartureLocation = await _context.Locations.FindAsync(dto.DepartureLocationId);
+            if (DepartureLocation is null)
+            {
+                return BadRequest("The provided Departure Location id dose not correspond to an object");
+            }
+            
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
+
+            var DestinationLocation = await _context.Locations.FindAsync(dto.DestinationLocationId);
+            if (DestinationLocation is null)
+            {
+                return BadRequest("The provided Destination Location id dose not correspond to an object");
+            }
+
+
+            var airLine = await _context.AirLines.FindAsync(dto.AirLineId);
+            if (airLine is null)
+            {
+                return BadRequest("The provided air line id dose not correspond to an object");
+            }
+
             var flight = new Flight
             {
                 Number = dto.Number,
+                AdminId = dto.AdminId,
                 AirLineId = dto.AirLineId,
                 DepartureLocationId = dto.DepartureLocationId,
                 DestinationLocationId = dto.DestinationLocationId,
@@ -76,6 +102,11 @@ namespace GraduationProjectWebApi.Controllers
                 return BadRequest("The provided Destination Location id dose not correspond to an object");
             }
 
+            var admin = await _context.Admins.FindAsync(dto.AdminId);
+            if (admin is null)
+            {
+                return BadRequest("The provided admin id dose not correspond to an object");
+            }
 
             var airLine = await _context.AirLines.FindAsync(dto.AirLineId);
             if (airLine is null)
@@ -85,6 +116,7 @@ namespace GraduationProjectWebApi.Controllers
 
             flight.Number = dto.Number;
             flight.AirLineId = dto.AirLineId;
+            flight.AdminId = dto.AdminId;
             flight.ArrivalTime = dto.ArrivalTime;
             flight.Departure = dto.Departure;
             flight.DepartureLocationId = dto.DepartureLocationId;

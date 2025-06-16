@@ -50,6 +50,7 @@ namespace GraduationProjectWebApi.Controllers
             var hotel = new HotelReservation
             {
                 Days = dto.Days,
+                BookDate = dto.BookDate,
                 Price = dto.Price,
                 RoomId = dto.RoomId,
                 OfferId = dto.OfferId,
@@ -92,6 +93,7 @@ namespace GraduationProjectWebApi.Controllers
             }
             hotel.OfferId = dto.OfferId;
             hotel.RoomId = dto.RoomId;
+            hotel.BookDate = dto.BookDate;
             hotel.Price = dto.Price;
             hotel.Days = dto.Days;
             try

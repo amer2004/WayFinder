@@ -29,6 +29,17 @@
                 .WithMany(x=>x.DestinationFlights)
                 .HasForeignKey(x => x.DestinationLocationId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Flight>()
+                .HasOne(x=>x.Admin)
+                .WithMany(x=>x.Flights)
+                .OnDelete(DeleteBehavior.NoAction);
+                
+            modelBuilder.Entity<Admin>()
+                .HasMany(x=>x.Flights)
+                .WithOne(x=>x.Admin)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }
