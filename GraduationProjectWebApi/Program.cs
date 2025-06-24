@@ -24,6 +24,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<AdminType>());
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<Nationality>());
 });
 
 
