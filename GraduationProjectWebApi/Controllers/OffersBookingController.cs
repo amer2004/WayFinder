@@ -103,7 +103,7 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("Delete/{Id}")]
+        [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var entity = await _context.OffersBookings.FindAsync(Id);

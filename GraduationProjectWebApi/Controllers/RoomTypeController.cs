@@ -74,7 +74,7 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize(Roles = "HotelAdmin,SuperAdmin")]
-        [HttpPut("Delete/{Id}")]
+        [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var entity = await _context.RoomTypes.FindAsync(Id);

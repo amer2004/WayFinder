@@ -37,11 +37,6 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] UserDTO dto)
         {
-            var EmailCheck = await _context.Users.AnyAsync(x => x.Email == dto.Email);
-            if (EmailCheck)
-            {
-                return BadRequest("the email is already used");
-            }
             var user = new User
             {
                 Email = dto.Email,
@@ -66,7 +61,7 @@ namespace GraduationProjectWebApi.Controllers
 
         [Authorize]
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> Update(int Id,[FromForm] UserDTO dto)
+        public async Task<IActionResult> Update(int Id,[FromBody] UserDTO dto)
         {
             var user = await _context.Users.FindAsync(Id);
             if (user is null)
@@ -93,7 +88,7 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize]
-        [HttpPut("Delete/{Id}")]
+        [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var entity = await _context.Users.FindAsync(Id);

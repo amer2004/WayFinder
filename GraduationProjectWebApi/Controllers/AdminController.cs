@@ -36,11 +36,6 @@ namespace GraduationProjectWebApi.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add(AdminDTO dto)
         {
-            var EmailCheck = await _context.Admins.AnyAsync(x => x.Email == dto.Email);
-            if (EmailCheck)
-            {
-                return BadRequest("the email is already used");
-            }
             var admin = new Admin
             {
                 Email = dto.Email,
@@ -90,7 +85,7 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("Delete/{Id}")]
+        [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var entity = await _context.Admins.FindAsync(Id);

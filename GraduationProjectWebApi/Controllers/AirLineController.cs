@@ -90,7 +90,7 @@ namespace GraduationProjectWebApi.Controllers
         }
 
         [Authorize(Roles = "FilghtAdmin,SuperAdmin")]
-        [HttpPut("Delete/{Id}")]
+        [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var entity = await _context.AirLines.FindAsync(Id);

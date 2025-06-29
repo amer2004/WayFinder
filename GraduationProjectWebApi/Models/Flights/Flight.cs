@@ -8,10 +8,10 @@ public class Flight : Entity
     public int AirLineId { get; set; }
     public int DepartureLocationId { get; set; }
     public int DestinationLocationId { get; set; }
-    public int AdminId { get; set; }
+    public int? AdminId { get; set; }
 
     [JsonIgnore]
-    public Admin Admin { get; set; }
+    public Admin? Admin { get; set; }
     [JsonIgnore]
     public AirLine? AirLine { get; set; } = null;
     [JsonIgnore]
